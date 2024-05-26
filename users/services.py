@@ -17,8 +17,8 @@ class UserService:
             self,
             phone_number: str,
             password: str,
-            first_name: Optional[str],
-            last_name: Optional[str],
+            first_name: str,
+            last_name: str,
             **kwargs: Any
     ) -> User:
         user = User.objects.create(phone_number=phone_number, first_name=first_name, last_name=last_name, **kwargs)

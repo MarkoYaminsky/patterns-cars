@@ -7,11 +7,19 @@ from rest_framework.authtoken.models import Token
 
 
 class UserManager(BaseUserManager):
-    def create_superuser(self, phone_number: str, password: str) -> "User":
+    def create_superuser(
+            self, first_name: str, last_name: str, phone_number: str, password: str
+    ) -> "User":
         from users.services import UserService
 
         user_service = UserService()
-        return user_service.create_user(phone_number=phone_number, password=password, is_staff=True, is_superuser=True)
+        return user_service.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            password=password, is_staff=True,
+            is_superuser=True
+        )
 
 
 class User(AbstractBaseUser, PermissionsMixin):
