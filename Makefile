@@ -1,17 +1,15 @@
 runserver:
 	make migrate
-	python manage.py runserver
+	docker exec -it cars-backend python manage.py runserver
 
 install-requirements:
-	pip install -r requirements.txt
+	docker exec -it cars-backend pip install -r requirements.txt
 
 launch-docker:
-	docker compose up -d
-	make runserver
+	bash docker-launch.sh
 
 launch-docker-build:
-	docker compose up --build -d
-	make read
+	bash docker-launch.sh build
 
 migrate:
-	python manage.py migrate
+	docker exec -it cars-backend python manage.py migrate

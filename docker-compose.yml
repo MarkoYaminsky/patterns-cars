@@ -1,5 +1,21 @@
 version: '3'
 services:
+  backend:
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    build: .
+    container_name: cars-backend
+    ports:
+      - "8001:8000"
+    volumes:
+      - "./:/opt/"
+      - "./requirements.txt:/opt/requirements.txt"
+    depends_on:
+      - db
+
   db:
     image: postgres:15
     container_name: cars-db
