@@ -2,15 +2,16 @@ from typing import Any, Optional
 
 from django.db.models import Model
 
+from common.singletone import Singletone
 
-class CommonService:
 
+class CommonService(Singletone):
     def update_instance(
-        self,
-        *,
-        instance: Model,
-        data: dict[str, Any],
-        fields: Optional[tuple[str, ...]] = None
+            self,
+            *,
+            instance: Model,
+            data: dict[str, Any],
+            fields: Optional[tuple[str, ...]] = None
     ) -> tuple[Model, bool]:
         is_updated = False
 
@@ -19,9 +20,9 @@ class CommonService:
 
         for field in fields:
             if (
-                field not in data
-                or not hasattr(instance, field)
-                or getattr(instance, field) == data[field]
+                    field not in data
+                    or not hasattr(instance, field)
+                    or getattr(instance, field) == data[field]
             ):
                 continue
             is_updated = True

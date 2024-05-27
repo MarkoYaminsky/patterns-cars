@@ -3,12 +3,13 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.db.models import Q, QuerySet
 
+from common.singletone import Singletone
 from users.exceptions import InvadlidCredentialsError, NoAuthTokenError
 
 User = get_user_model()
 
 
-class UserSelector:
+class UserSelector(Singletone):
     def get_all_users(self, *args: Q, **kwargs: Any) -> QuerySet[User]:
         return User.objects.filter(*args, **kwargs)
 

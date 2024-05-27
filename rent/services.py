@@ -3,13 +3,14 @@ from datetime import datetime, timedelta
 from django.contrib.auth import get_user_model
 
 from common.services import CommonService
+from common.singletone import Singletone
 from rent.models import Car, HistoricalRecord
 from rent.selectors import CarSelector
 
 User = get_user_model()
 
 
-class HistoricalRecordService:
+class HistoricalRecordService(Singletone):
     def create_record(
         self, car: Car, user: User, status: HistoricalRecord.Status
     ) -> HistoricalRecord:
@@ -28,13 +29,9 @@ class HistoricalRecordService:
         )
 
 
-class CarService:
-    car_selector = CarSelector()
-    common_service = CommonService()
-    historical_record_service = HistoricalRecordService()
-
+class CarService(Singletone):
     def rent_car(self, car: Car, user: User) -> None:
-        self.common_service.update_instance(
+        CommonService().update_instance(
             instance=car,
             data={
                 "current_owner": user,
@@ -46,7 +43,7 @@ class CarService:
     def return_car(self, car: Car, is_canceled: bool, user: User) -> None:
         if car.rent_to <= datetime.now():
             self.add_fine(car, "Late return")
-        self.historical_record_service.create_record(
+        HistoricalRecordService().create_record(
             car,
             status=(
                 HistoricalRecord.Status.CANCELED
@@ -55,7 +52,7 @@ class CarService:
             ),
             user=user,
         )
-        self.common_service.update_instance(
+        CommonService().update_instance(
             instance=car,
             data={"rent_started_at": None, "rent_to": None, "current_owner": None},
         )

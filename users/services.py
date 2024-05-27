@@ -4,15 +4,12 @@ from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 
 from common.services import CommonService
-from users.selectors import UserSelector
+from common.singletone import Singletone
 
 User = get_user_model()
 
 
-class UserService:
-    selector = UserSelector()
-    common_service = CommonService()
-
+class UserService(Singletone):
     def create_user(
         self,
         phone_number: str,
@@ -33,4 +30,4 @@ class UserService:
         return user
 
     def update_user(self, user: User, **kwargs: Any) -> None:
-        self.common_service.update_instance(instance=user, data=kwargs)
+        CommonService().update_instance(instance=user, data=kwargs)

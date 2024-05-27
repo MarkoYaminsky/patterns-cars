@@ -29,8 +29,7 @@ class CarOutputSerializer(BaseStringOutputSerializer):
         )
 
     def get_price_for_rent(self, car: Car) -> int:
-        selector = CarSelector()
-        return selector.get_price_for_rent(car)
+        return CarSelector().get_price_for_rent(car)
 
 
 class HistoricalRecordOutputSerializer(BaseStringOutputSerializer):

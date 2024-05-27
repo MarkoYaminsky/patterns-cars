@@ -1,12 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, F
 
+from common.singletone import Singletone
 from rent.models import Car, HistoricalRecord
 
 User = get_user_model()
 
 
-class CarSelector:
+class CarSelector(Singletone):
     def get_all_cars(self) -> QuerySet[Car]:
         return Car.objects.all().order_by("current_owner")
 
@@ -26,7 +27,7 @@ class CarSelector:
         )
 
 
-class HistoricalRecordSelector:
+class HistoricalRecordSelector(Singletone):
     def get_historical_records(self, user: User) -> QuerySet[HistoricalRecord]:
         return user.historicalrecord_set.annotate(
             total_price=F("price_per_day_in_dollars") * F("renting_period_in_days")
