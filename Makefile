@@ -13,3 +13,9 @@ launch-docker-build:
 
 migrate:
 	docker exec -it cars-backend python manage.py migrate
+
+loaddata:
+	docker exec -it cars-backend python manage.py loaddata rent/fixtures/cars.json
+
+create-super-user:
+	docker exec -it cars-backend python manage.py createsuperuser

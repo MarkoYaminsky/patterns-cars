@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 
 class UserManager(BaseUserManager):
     def create_superuser(
-            self, first_name: str, last_name: str, phone_number: str, password: str
+        self, first_name: str, last_name: str, phone_number: str, password: str
     ) -> "User":
         from users.services import UserService
 
@@ -17,8 +17,9 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             phone_number=phone_number,
-            password=password, is_staff=True,
-            is_superuser=True
+            password=password,
+            is_staff=True,
+            is_superuser=True,
         )
 
 
@@ -31,7 +32,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=255, blank=True)
 
     USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ("first_name", "last_name", "password",)
+    REQUIRED_FIELDS = (
+        "first_name",
+        "last_name",
+        "password",
+    )
     objects = UserManager()
 
     @property

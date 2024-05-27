@@ -40,7 +40,14 @@ class UserLoginOutputSerializer(serializers.Serializer):
 class UserRetrieveOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "phone_number", "first_name", "last_name", "middle_name", "address")
+        fields = (
+            "id",
+            "phone_number",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "address",
+        )
 
 
 class UserUpdateInputSerializer(serializers.ModelSerializer):
