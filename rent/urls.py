@@ -7,6 +7,7 @@ from rent.views import (
     CarDetailAPI,
     RentCarAPI,
     ReturnCarAPI,
+    HistoricalRecordListAPI,
 )
 
 app_name = "cars"
@@ -18,4 +19,5 @@ urlpatterns = [
     path("<int:car_id>/", CarDetailAPI.as_view(), name="car-detail"),
     path("rent/<int:car_id>/", RentCarAPI.as_view(), name="rent-car"),
     path("return/<int:car_id>/", ReturnCarAPI.as_view(), name="return-car"),
+    path("history/", HistoricalRecordListAPI.as_view(), name="history"),
 ]

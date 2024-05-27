@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from cars.serializers import (
+from users.serializers import (
     UserRegistrationCheckInputSerializer,
     UserLoginOutputSerializer,
     UserLoginInputSerializer,

@@ -7,8 +7,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_404_NOT
 from rest_framework.views import APIView
 
 from rent.models import Car
-from rent.selectors import CarSelector
-from rent.serializers import CarOutputSerializer
+from rent.selectors import CarSelector, HistoricalRecordSelector
+from rent.serializers import CarOutputSerializer, HistoricalRecordOutputSerializer
 from rent.services import CarService
 
 car_selector = CarSelector()
@@ -67,10 +67,27 @@ class ReturnCarAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(
-        request=None, responses={HTTP_204_NO_CONTENT: None, HTTP_404_NOT_FOUND: None}
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None, HTTP_404_NOT_FOUND: None},
     )
     def post(self, request, car_id):
-        """Return a car."""
+        """
+        Returns a car.
+        If the car rent is canceled, pass is_canceled=true in the query params.
+        """
         car = get_object_or_404(Car, id=car_id)
-        car_service.return_car(car)
+        car_service.return_car(
+            car,
+            user=request.user,
+            is_canceled=request.query_params.get("is_canceled") == "true",
+        )
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+class HistoricalRecordListAPI(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = HistoricalRecordOutputSerializer
+    historical_record_selector = HistoricalRecordSelector()
+
+    def get_queryset(self):
+        return self.historical_record_selector.get_historical_records(self.request.user)

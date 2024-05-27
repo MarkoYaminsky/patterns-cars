@@ -1,3 +1,4 @@
+from common.serializers import BaseStringOutputSerializer
 from users.exceptions import UserWithPhoneNumberAlreadyExistsError
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -37,7 +38,7 @@ class UserLoginOutputSerializer(serializers.Serializer):
     token = serializers.CharField()
 
 
-class UserRetrieveOutputSerializer(serializers.ModelSerializer):
+class UserRetrieveOutputSerializer(BaseStringOutputSerializer):
     class Meta:
         model = User
         fields = (

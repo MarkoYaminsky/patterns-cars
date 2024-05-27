@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.db.models import QuerySet
+from django.db.models import QuerySet, F
 
-from rent.models import Car
+from rent.models import Car, HistoricalRecord
 
 User = get_user_model()
 
@@ -23,4 +23,12 @@ class CarSelector:
         return (
             car.daily_price_in_dollars * car.renting_period_in_days
             + car.initial_deposit_in_dollars
+        )
+
+
+class HistoricalRecordSelector:
+    def get_historical_records(self, user: User) -> QuerySet[HistoricalRecord]:
+        return user.historicalrecord_set.annotate(
+            total_price=F("price_per_day_in_dollars") * F("renting_period_in_days")
+            + F("initial_deposit_in_dollars")
         )
