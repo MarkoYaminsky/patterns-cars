@@ -16,7 +16,7 @@ class UserSelector(Singletone):
     def get_user_by_phone_number(self, phone_number: str) -> User:
         return self.get_all_users(phone_number=phone_number).first()
 
-    def get_user_token_by_credentials(self, phone_number: str, password: str) -> dict:
+    def get_user_by_credentials(self, phone_number: str, password: str) -> User:
         user = self.get_all_users(phone_number=phone_number).first()
 
         if user is None or not user.check_password(password):
@@ -26,4 +26,4 @@ class UserSelector(Singletone):
         if user_token is None:
             raise NoAuthTokenError(phone_number)
 
-        return {"token": user_token.key}
+        return user

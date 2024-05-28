@@ -29,9 +29,7 @@ class UserRegistrationAPI(APIView):
         serializer = UserRegistrationInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = UserService().create_user(**serializer.validated_data)
-        return Response(
-            self.serializer_class({"token": user.token.key}).data, status=HTTP_200_OK
-        )
+        return Response(self.serializer_class(user).data, status=HTTP_200_OK)
 
 
 class UserRegistrationCheckAPI(APIView):
@@ -61,8 +59,8 @@ class UserLoginAPI(APIView):
         """Returns a user token."""
         serializer = UserLoginInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        token = UserSelector().get_user_token_by_credentials(**serializer.validated_data)
-        return Response(self.serializer_class(token).data, status=HTTP_200_OK)
+        user = UserSelector().get_user_by_credentials(**serializer.validated_data)
+        return Response(self.serializer_class(user).data, status=HTTP_200_OK)
 
 
 class UserSelfRetrieveUpdateAPI(APIView):

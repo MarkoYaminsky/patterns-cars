@@ -58,3 +58,9 @@ class HistoricalRecordOutputSerializer(BaseStringOutputSerializer):
             "started_at_ukrainian_format_datetime",
             "finished_at_ukrainian_format_datetime",
         )
+
+
+class CarUpdateInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Car
+        fields = "__all__"

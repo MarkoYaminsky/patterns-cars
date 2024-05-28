@@ -34,7 +34,11 @@ class UserLoginInputSerializer(serializers.Serializer):
 
 
 class UserLoginOutputSerializer(serializers.Serializer):
-    token = serializers.CharField()
+    token = serializers.SerializerMethodField()
+    is_superuser = serializers.BooleanField()
+
+    def get_token(self, obj: User) -> str:
+        return obj.token.key
 
 
 class UserRetrieveOutputSerializer(BaseStringOutputSerializer):

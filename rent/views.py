@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 
+from common.services import CommonService
 from rent.models import Car
 from rent.selectors import CarSelector, HistoricalRecordSelector
-from rent.serializers import CarOutputSerializer, HistoricalRecordOutputSerializer
+from rent.serializers import CarOutputSerializer, HistoricalRecordOutputSerializer, CarUpdateInputSerializer
 from rent.services import CarService
 
 
@@ -45,6 +46,18 @@ class CarDetailAPI(APIView):
         car = get_object_or_404(Car, id=car_id)
         serializer = CarOutputSerializer(car)
         return Response(serializer.data, status=HTTP_200_OK)
+
+    @extend_schema(
+        request=CarOutputSerializer,
+        responses={HTTP_204_NO_CONTENT: None, HTTP_404_NOT_FOUND: None},
+    )
+    def patch(self, request, car_id):
+        """Updates a car."""
+        car = get_object_or_404(Car, id=car_id)
+        serializer = CarUpdateInputSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        CommonService().update_instance(instance=car, data=serializer.validated_data)
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class RentCarAPI(APIView):
