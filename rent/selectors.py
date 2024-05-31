@@ -29,7 +29,10 @@ class CarSelector(Singletone):
 
 class HistoricalRecordSelector(Singletone):
     def get_historical_records(self, user: User) -> QuerySet[HistoricalRecord]:
-        return user.historicalrecord_set.annotate(
+        records = user.historicalrecord_set.all()
+        if user.is_superuser:
+            records = HistoricalRecord.objects.all()
+        return records.annotate(
             total_price=F("price_per_day_in_dollars") * F("renting_period_in_days")
             + F("initial_deposit_in_dollars")
         )
